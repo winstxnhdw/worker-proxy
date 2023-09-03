@@ -1,6 +1,6 @@
 # worker-proxy
 
-A boilerplate for [Cloudflare Workers](https://workers.cloudflare.com/).
+My personal proxy with Cloudflare Workers.
 
 ## Development
 
