@@ -12,8 +12,8 @@ const router = OpenAPIRouter({
   }
 })
 
-router.get('/', default_proxy)
-router.get('/resilient', resilient_proxy)
+router.post('/', default_proxy)
+router.post('/resilient', resilient_proxy)
 router.all('*', () => new Response('Not found!', { status: 404 }))
 
 export default {
