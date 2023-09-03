@@ -35,5 +35,7 @@ export const resilient_proxy = async (request: Request): Promise<Response> => {
     .filter((result): result is PromiseFulfilledResult<string> => result.status === 'fulfilled')
     .map((result): string => result.value)
 
-  return new Response(JSON.stringify(responses), { status: 200 })
+  return responses.length !== 0
+    ? new Response(JSON.stringify(responses), { status: 200 })
+    : new Response('All requests has failed!', { status: 500 })
 }
