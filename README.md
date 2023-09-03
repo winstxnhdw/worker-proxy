@@ -1,5 +1,9 @@
 # worker-proxy
 
+[![main.yml](https://github.com/winstxnhdw/worker-proxy/actions/workflows/main.yml/badge.svg)](https://github.com/winstxnhdw/worker-proxy/actions/workflows/main.yml)
+[![formatter.yml](https://github.com/winstxnhdw/worker-proxy/actions/workflows/formatter.yml/badge.svg)](https://github.com/winstxnhdw/worker-proxy/actions/workflows/formatter.yml)
+[![dependabot.yml](https://github.com/winstxnhdw/worker-proxy/actions/workflows/dependabot.yml/badge.svg)](https://github.com/winstxnhdw/worker-proxy/actions/workflows/dependabot.yml)
+
 My personal proxy with Cloudflare Workers.
 
 ## Development
@@ -8,18 +12,4 @@ Install all dependencies.
 
 ```bash
 bun install
-```
-
-## Testing
-
-Run your tests with hot reloading.
-
-```bash
-bun run test
-```
-
-Run your tests without hot reloading. For testing in a CI pipeline.
-
-```bash
-bun test
 ```
