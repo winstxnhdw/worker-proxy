@@ -1,20 +1,21 @@
-import { get_request } from '@/get_request'
-import { parse_request } from '@/parse_request'
+import { default_proxy, resilient_proxy } from '@/proxies'
+import { OpenAPIRouter } from '@cloudflare/itty-router-openapi'
 
-async function main(request: Request): Promise<Response> {
-  const proxy_request = await parse_request(request)
-
-  if (proxy_request === undefined) {
-    return new Response('Invalid request!', { status: 400 })
+const router = OpenAPIRouter({
+  docs_url: '/docs',
+  schema: {
+    info: {
+      title: 'worker-proxy',
+      description: 'A proxy for making requests to endpoint(s).',
+      version: 'v1.0.0'
+    }
   }
+})
 
-  const responses = await Promise.all(proxy_request.endpoints.map(get_request)).catch(() => undefined)
-
-  return responses
-    ? new Response(JSON.stringify(responses), { status: 200 })
-    : new Response('All or some requests has failed!', { status: 500 })
-}
+router.get('/', default_proxy)
+router.get('/resilient', resilient_proxy)
+router.all('*', () => new Response('Not found!', { status: 404 }))
 
 export default {
-  fetch: main
+  fetch: router.handle
 }
