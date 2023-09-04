@@ -1,4 +1,4 @@
-import { default_proxy, resilient_proxy } from '@/proxies'
+import { atomic_proxy, default_proxy, resilient_proxy } from '@/proxies'
 import { OpenAPIRouter } from '@cloudflare/itty-router-openapi'
 
 const router = OpenAPIRouter({
@@ -14,6 +14,7 @@ const router = OpenAPIRouter({
 
 router.post('/', default_proxy)
 router.post('/resilient', resilient_proxy)
+router.post('/atomic', atomic_proxy)
 router.all('*', () => new Response('Not found!', { status: 404 }))
 
 export default {

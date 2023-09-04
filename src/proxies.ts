@@ -1,7 +1,7 @@
 import { get_request } from '@/get_request'
-import type { ProxyRequest } from '@/types'
+import type { Endpoint, ProxyRequest } from '@/types'
 
-const parse_request = async (request: Request): Promise<ProxyRequest | undefined> => {
+const parse_request = async <T extends ProxyRequest | Endpoint>(request: Request): Promise<T | undefined> => {
   try {
     return request.json()
   } catch {
@@ -10,7 +10,7 @@ const parse_request = async (request: Request): Promise<ProxyRequest | undefined
 }
 
 export const default_proxy = async (request: Request): Promise<Response> => {
-  const proxy_request = await parse_request(request)
+  const proxy_request = await parse_request<ProxyRequest>(request)
 
   if (proxy_request === undefined) {
     return new Response('Invalid request!', { status: 400 })
@@ -24,7 +24,7 @@ export const default_proxy = async (request: Request): Promise<Response> => {
 }
 
 export const resilient_proxy = async (request: Request): Promise<Response> => {
-  const proxy_request = await parse_request(request)
+  const proxy_request = await parse_request<ProxyRequest>(request)
 
   if (proxy_request === undefined) {
     return new Response('Invalid request!', { status: 400 })
@@ -38,4 +38,18 @@ export const resilient_proxy = async (request: Request): Promise<Response> => {
   return responses.length !== 0
     ? new Response(JSON.stringify(responses), { status: 200 })
     : new Response('All requests has failed!', { status: 500 })
+}
+
+export const atomic_proxy = async (request: Request): Promise<Response> => {
+  const proxy_request = await parse_request<Endpoint>(request)
+
+  if (proxy_request === undefined) {
+    return new Response('Invalid request!', { status: 400 })
+  }
+
+  const response = await get_request(proxy_request).catch(() => undefined)
+
+  return response
+    ? new Response(JSON.stringify(response), { status: 200 })
+    : new Response('Request has failed!', { status: 500 })
 }
