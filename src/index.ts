@@ -1,5 +1,6 @@
 import { atomic_proxy, default_proxy, resilient_proxy } from '@/proxies'
 import { OpenAPIRouter } from '@cloudflare/itty-router-openapi'
+import { createCors } from 'itty-router'
 
 const router = OpenAPIRouter({
   docs_url: '/docs',
@@ -12,11 +13,18 @@ const router = OpenAPIRouter({
   }
 })
 
+const { preflight, corsify } = createCors({
+  methods: ['POST'],
+  origins: ['*']
+})
+
+router.all('*', preflight)
 router.post('/', default_proxy)
 router.post('/resilient', resilient_proxy)
 router.post('/atomic', atomic_proxy)
 router.all('*', () => new Response('Not found!', { status: 404 }))
 
 export default {
-  fetch: router.handle
+  fetch: async (request: Request, env: unknown, ctx: unknown) =>
+    router.handle(request, env, ctx).catch(console.error).then(corsify)
 }
