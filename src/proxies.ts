@@ -9,6 +9,13 @@ const parse_request = async <T extends ProxyRequest | Endpoint>(request: Request
   }
 }
 
+const stringify_error = (error: string, message: string = ''): string => {
+  return JSON.stringify({
+    message: message,
+    error: error
+  })
+}
+
 export const default_proxy = async (request: Request): Promise<Response> => {
   const proxy_request = await parse_request<ProxyRequest>(request)
 
@@ -16,28 +23,13 @@ export const default_proxy = async (request: Request): Promise<Response> => {
     return new Response('Invalid request!', { status: 400 })
   }
 
-  const responses = await Promise.all(proxy_request.endpoints.map(get_request)).catch(() => undefined)
+  const responses = await Promise.all(proxy_request.endpoints.map(get_request)).catch(
+    (reason: string) => [undefined, reason] as const
+  )
 
-  return responses
+  return responses[0]
     ? new Response(JSON.stringify(responses), { status: 200 })
-    : new Response('All or some requests has failed!', { status: 500 })
-}
-
-export const resilient_proxy = async (request: Request): Promise<Response> => {
-  const proxy_request = await parse_request<ProxyRequest>(request)
-
-  if (proxy_request === undefined) {
-    return new Response('Invalid request!', { status: 400 })
-  }
-
-  const results = await Promise.allSettled(proxy_request.endpoints.map(get_request))
-  const responses = results
-    .filter((result): result is PromiseFulfilledResult<string> => result.status === 'fulfilled')
-    .map((result): string => result.value)
-
-  return responses.length !== 0
-    ? new Response(JSON.stringify(responses), { status: 200 })
-    : new Response('All requests has failed!', { status: 500 })
+    : new Response(stringify_error(responses[1], 'All or some requests has failed!'), { status: 500 })
 }
 
 export const atomic_proxy = async (request: Request): Promise<Response> => {
@@ -47,9 +39,9 @@ export const atomic_proxy = async (request: Request): Promise<Response> => {
     return new Response('Invalid request!', { status: 400 })
   }
 
-  const response = await get_request(proxy_request).catch(() => undefined)
+  const response = await get_request(proxy_request).catch((reason: string) => [undefined, reason] as const)
 
-  return response
+  return response[0]
     ? new Response(JSON.stringify(response), { status: 200 })
-    : new Response('Request has failed!', { status: 500 })
+    : new Response(stringify_error(response[1], 'All or some requests has failed!'), { status: 500 })
 }
