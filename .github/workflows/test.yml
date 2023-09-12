@@ -1,0 +1,35 @@
+name: E2E Test
+
+on:
+  workflow_dispatch:
+  workflow_run:
+    workflows: [Deploy]
+    types: [completed]
+  push:
+    paths:
+      - .github/workflows/test.yml
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      WORKER_ENDPOINT: ${{ secrets.WORKER_ENDPOINT }}
+
+    steps:
+      - name: cURL Worker
+        run: |
+          echo "RESPONSE=$(curl -s $WORKER_ENDPOINT/atomic \
+            -d '{ "endpoint": "https://winstn.netlify.app/test.txt" }')" >> $GITHUB_ENV
+
+      - name: Test Success
+        env:
+          RESPONSE: ${{ env.RESPONSE }}
+        run: |
+          [ "$RESPONSE" = "\"The quick brown fox jumps over the lazy dog.\\n\"" ]
+
+      - name: Test Failure
+        env:
+          RESPONSE: ${{ env.RESPONSE }}
+        run: |
+          [ ! "$RESPONSE" = "This should return false." ]
