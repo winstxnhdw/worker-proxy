@@ -3,8 +3,8 @@ name: E2E Test
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [Deploy]
-    types: [completed]
+    workflows: Deploy
+    types: completed
   push:
     paths:
       - .github/workflows/test.yml
