@@ -20,7 +20,7 @@ jobs:
       - name: cURL Worker
         run: |
           echo "RESPONSE=$(curl -s $WORKER_ENDPOINT/atomic \
-            -d '{ "endpoint": "https://winstn.netlify.app/test.txt" }')" >> $GITHUB_ENV
+            -d '{ "endpoint": "https://hosted.winst.in/test.txt" }')" >> $GITHUB_ENV
 
       - name: Test Success
         env:
