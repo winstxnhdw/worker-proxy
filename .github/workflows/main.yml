@@ -1,15 +1,8 @@
 name: Test
 
 on:
-  push:
-    paths:
-      - .github/workflows/main.yml
-      - .eslintrc
-      - .eslintignore
-      - tsconfig.json
-      - package.json
-      - bun.lockb
-      - src/*
+  pull_request_target:
+    types: [opened, reopened]
   pull_request:
     paths:
       - .github/workflows/main.yml
@@ -19,6 +12,15 @@ on:
       - package.json
       - bun.lockb
       - '*.ts'
+  push:
+    paths:
+      - .github/workflows/main.yml
+      - .eslintrc
+      - .eslintignore
+      - tsconfig.json
+      - package.json
+      - bun.lockb
+      - src/*
 
 jobs:
   test:
