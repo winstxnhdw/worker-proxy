@@ -10,6 +10,15 @@ on:
       - package.json
       - bun.lockb
       - src/*
+  pull_request:
+    paths:
+      - .github/workflows/main.yml
+      - .eslintrc
+      - .eslintignore
+      - tsconfig.json
+      - package.json
+      - bun.lockb
+      - '*.ts'
 
 jobs:
   test:
