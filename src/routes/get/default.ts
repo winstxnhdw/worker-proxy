@@ -1,4 +1,4 @@
-import { fetch_request } from '@/fetch_request'
+import { fetch_request } from '@/utils'
 import { createRoute, z } from '@hono/zod-openapi'
 import type { Handler } from 'hono'
 
