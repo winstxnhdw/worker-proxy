@@ -12,15 +12,11 @@ const DefaultProxyQuerySchema = z.object({
 const route = createRoute({
   method: 'get',
   path: '/get/default',
-  request: {
-    query: DefaultProxyQuerySchema,
-  },
+  request: { query: DefaultProxyQuerySchema },
   responses: {
     200: {
       content: {
-        'text/plain': {
-          schema: z.string(),
-        },
+        'text/plain': { schema: z.string() },
       },
       description: 'The string response from the endpoint.',
     },

@@ -28,18 +28,14 @@ const route = createRoute({
     query: DefaultProxyQuerySchema,
     body: {
       content: {
-        'application/json': {
-          schema: DefaultProxyBodySchema,
-        },
+        'application/json': { schema: DefaultProxyBodySchema },
       },
     },
   },
   responses: {
     200: {
       content: {
-        'text/plain': {
-          schema: z.string(),
-        },
+        'text/plain': { schema: z.string() },
       },
       description: 'The string response from the endpoint.',
     },
