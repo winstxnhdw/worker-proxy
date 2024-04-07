@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: cURL Worker
         run: |
-          echo "RESPONSE=$(curl -s $WORKER_ENDPOINT/atomic \
+          echo "RESPONSE=$(curl -s $WORKER_ENDPOINT/post/default \
             -d '{ "endpoint": "https://hosted.winst.in/test.txt" }')" >> $GITHUB_ENV
 
       - name: Test Success

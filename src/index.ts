@@ -1,32 +1,26 @@
-import { atomic_proxy, default_proxy } from '@/proxies'
-import { OpenAPIRouter } from '@cloudflare/itty-router-openapi'
-import { createCors } from 'itty-router'
+import { default_proxy_get } from '@/routes/get/default'
+import { batch_proxy_post } from '@/routes/post/batch'
+import { default_proxy_post } from '@/routes/post/default'
+import { swaggerUI } from '@hono/swagger-ui'
+import { OpenAPIHono } from '@hono/zod-openapi'
 
-async function main(request: Request) {
-  const router = OpenAPIRouter({
-    docs_url: '/docs',
-    schema: {
-      info: {
-        title: 'worker-proxy',
-        description: 'A proxy for making requests to endpoint(s).',
-        version: 'v1.0.0'
-      }
-    }
+function main() {
+  const openapi_documentation_route = '/doc'
+  const app = new OpenAPIHono().doc(openapi_documentation_route, {
+    openapi: '3.1.0',
+    info: {
+      version: '1.0.0',
+      title: 'worker-proxy',
+    },
   })
 
-  const { preflight, corsify } = createCors({
-    methods: ['POST'],
-    origins: ['*']
-  })
+  app
+    .openapi(default_proxy_post.route, default_proxy_post.handler)
+    .openapi(default_proxy_get.route, default_proxy_get.handler)
+    .openapi(batch_proxy_post.route, batch_proxy_post.handler)
+    .get('/docs', swaggerUI({ url: openapi_documentation_route }))
 
-  router.all('*', preflight)
-  router.post('/', default_proxy)
-  router.post('/atomic', atomic_proxy)
-  router.all('*', () => new Response(undefined, { status: 404 }))
-
-  return router.handle(request).catch(console.error).then(corsify)
+  return app
 }
 
-export default {
-  fetch: main
-}
+export default main()

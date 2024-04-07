@@ -5,7 +5,7 @@
 [![test.yml](https://github.com/winstxnhdw/worker-proxy/actions/workflows/test.yml/badge.svg)](https://github.com/winstxnhdw/worker-proxy/actions/workflows/test.yml)
 [![formatter.yml](https://github.com/winstxnhdw/worker-proxy/actions/workflows/formatter.yml/badge.svg)](https://github.com/winstxnhdw/worker-proxy/actions/workflows/formatter.yml)
 
-My personal proxy with Cloudflare Workers.
+My personal proxy with Cloudflare Workers, powered by [Hono](https://hono.dev/).
 
 ## Development
 
