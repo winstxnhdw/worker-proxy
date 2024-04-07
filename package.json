@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "lint": "biome ci .",
+    "lint": "biome check .",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy src/index.ts",
     "test": "bun test --watch"
@@ -9,6 +9,7 @@
     "@hono/swagger-ui": "^0.2.1",
     "@hono/zod-openapi": "^0.10.0",
     "hono": "^4.2.2",
+    "tslib": "^2.6.2",
     "zod": "^3.22.4"
   },
   "devDependencies": {
