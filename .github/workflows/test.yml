@@ -21,13 +21,14 @@ jobs:
       - name: cURL Worker
         run: |
           echo "RESPONSE=$(curl -s $WORKER_ENDPOINT/post/default \
+            -H 'Content-Type: application/json' \
             -d '{ "endpoint": "https://hosted.winst.in/test.txt" }')" >> $GITHUB_ENV
 
       - name: Test Success
         env:
           RESPONSE: ${{ env.RESPONSE }}
         run: |
-          [ "$RESPONSE" = "\"The quick brown fox jumps over the lazy dog.\\n\"" ]
+          [ "$RESPONSE" = "The quick brown fox jumps over the lazy dog." ]
 
       - name: Test Failure
         env:
