@@ -14,18 +14,7 @@ on:
 
 jobs:
   bun:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4.1.2
-        with:
-          show-progress: false
-
-      - name: Setup Biome
-        uses: biomejs/setup-biome@v2
-        with:
-          version: latest
-
-      - name: Run Biome
-        run: biome ci .
+    uses: winstxnhdw/actions/.github/workflows/bun.yml@main
+    with:
+      disable-test: true
+      disable-build: true
