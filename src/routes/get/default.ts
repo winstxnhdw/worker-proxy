@@ -9,6 +9,10 @@ const DefaultProxyQuerySchema = z.object({
   method: z.union([z.literal('GET'), z.literal('POST'), z.literal('PUT'), z.literal('DELETE')]).default('GET'),
 })
 
+const DefaultProxyErrorSchema = z.object({
+  error: z.literal('Failed to fetch the endpoint!'),
+})
+
 const route = createRoute({
   method: 'get',
   path: '/get/default',
@@ -19,6 +23,12 @@ const route = createRoute({
         'text/plain': { schema: z.string() },
       },
       description: 'The string response from the endpoint.',
+    },
+    500: {
+      content: {
+        'application/json': { schema: DefaultProxyErrorSchema },
+      },
+      description: 'Failed to fetch the endpoint.',
     },
   },
 })
@@ -45,7 +55,7 @@ const handler: Handler = async (context) => {
   const headers = parse_json<Record<string, string>>(context.req.query('headers')) ?? {}
   const response = await fetch_request(method, endpoint, body, headers)
 
-  return response ? context.html(response) : context.json({ error: 'Failed to fetch the endpoint!' })
+  return response ? context.html(response) : context.json({ error: 'Failed to fetch the endpoint!' }, 500)
 }
 
 export const default_proxy_get = {

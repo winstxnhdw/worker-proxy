@@ -21,6 +21,10 @@ const BatchProxyBodySchema = z.object({
   ),
 })
 
+const BatchProxyErrorSchema = z.object({
+  error: z.literal('Failed to fetch from one or more endpoints!'),
+})
+
 const BatchProxyResponseSchema = z.object({
   responses: z.array(z.string()),
 })
@@ -42,6 +46,12 @@ const route = createRoute({
       },
       description: 'The string response from the endpoint.',
     },
+    500: {
+      content: {
+        'application/json': { schema: BatchProxyErrorSchema },
+      },
+      description: 'Failed to fetch from one or more endpoints.',
+    },
   },
 })
 
@@ -54,7 +64,7 @@ const handler: Handler = async (context) => {
 
   return !responses.some((response) => response === undefined)
     ? context.json({ responses: responses })
-    : context.json({ error: 'Failed to fetch from one or more endpoints!' })
+    : context.json({ error: 'Failed to fetch from one or more endpoints!' }, 500)
 }
 
 export const batch_proxy_post = {
