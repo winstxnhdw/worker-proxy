@@ -34,13 +34,18 @@ const parse_json = <T>(json: string | undefined): T | undefined => {
 }
 
 const handler: Handler = async (context) => {
+  const endpoint = context.req.query('endpoint')
+
+  if (!endpoint) {
+    return context.json({ error: 'Missing endpoint parameter!' })
+  }
+
   const method = context.req.query('method') as 'GET' | 'POST' | 'PUT' | 'DELETE'
-  const endpoint = context.req.query('endpoint') as string
   const body = context.req.query('body') ?? null
   const headers = parse_json<Record<string, string>>(context.req.query('headers')) ?? {}
   const response = await fetch_request(method, endpoint, body, headers)
 
-  return response ? context.text(response) : context.json({ error: 'Failed to fetch the endpoint.' })
+  return response ? context.html(response) : context.json({ error: 'Failed to fetch the endpoint!' })
 }
 
 export const default_proxy_get = {

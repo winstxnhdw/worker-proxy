@@ -1,4 +1,5 @@
 import { default_proxy_get } from '@/routes/get/default'
+import { redirect_proxy_get } from '@/routes/get/redirect'
 import { batch_proxy_post } from '@/routes/post/batch'
 import { default_proxy_post } from '@/routes/post/default'
 import { swaggerUI } from '@hono/swagger-ui'
@@ -22,6 +23,7 @@ function main() {
     .openapi(default_proxy_post.route, default_proxy_post.handler)
     .openapi(default_proxy_get.route, default_proxy_get.handler)
     .openapi(batch_proxy_post.route, batch_proxy_post.handler)
+    .openapi(redirect_proxy_get.route, redirect_proxy_get.handler)
 
   return app
 }

@@ -54,7 +54,7 @@ const handler: Handler = async (context) => {
 
   return !responses.some((response) => response === undefined)
     ? context.json({ responses: responses })
-    : context.json({ error: 'Failed to fetch from one or more endpoints.' })
+    : context.json({ error: 'Failed to fetch from one or more endpoints!' })
 }
 
 export const batch_proxy_post = {

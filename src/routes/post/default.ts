@@ -46,7 +46,7 @@ const handler: Handler = async (context) => {
   const { endpoint, body, headers } = await context.req.json<z.infer<typeof DefaultProxyBodySchema>>()
   const response = await fetch_request(method, endpoint, stringify_json(body), headers)
 
-  return response ? context.text(response) : context.json({ error: 'Failed to fetch the endpoint.' })
+  return response ? context.html(response) : context.json({ error: 'Failed to fetch the endpoint!' })
 }
 
 export const default_proxy_post = {
