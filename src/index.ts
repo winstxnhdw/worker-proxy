@@ -1,3 +1,4 @@
+import { json } from '@/middlewares'
 import { default_proxy_get } from '@/routes/get/default'
 import { redirect_proxy_get } from '@/routes/get/redirect'
 import { batch_proxy_post } from '@/routes/post/batch'
@@ -17,15 +18,14 @@ function main() {
   })
 
   app.get('/docs', swaggerUI({ url: openapi_documentation_route }))
-  app.use('*', cors())
+  app.use(cors(), json())
+  // app.use(cache_param({ cacheName: 'worker-proxy' }))
 
-  app
+  return app
     .openapi(default_proxy_post.route, default_proxy_post.handler)
     .openapi(default_proxy_get.route, default_proxy_get.handler)
     .openapi(batch_proxy_post.route, batch_proxy_post.handler)
     .openapi(redirect_proxy_get.route, redirect_proxy_get.handler)
-
-  return app
 }
 
 export default main()

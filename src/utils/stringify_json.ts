@@ -1,9 +1,13 @@
+// biome-ignore format: do not format try-catch
+
 export const stringify_json = (json: Record<string, unknown> | undefined): string | null => {
   if (json === undefined) return null
 
   try {
     return JSON.stringify(json)
-  } catch {
+  }
+
+  catch {
     return null
   }
 }

@@ -1,3 +1,5 @@
+// biome-ignore format: do not format try-catch
+
 export const fetch_request = async (
   method: 'GET' | 'POST' | 'PUT' | 'DELETE',
   endpoint: string,
@@ -9,10 +11,12 @@ export const fetch_request = async (
       method: method,
       body: body,
       headers: headers ?? {},
-    }).catch(() => undefined)
+    })
 
     return request.text()
-  } catch {
+  }
+
+  catch {
     return undefined
   }
 }
