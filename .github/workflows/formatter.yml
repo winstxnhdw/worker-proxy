@@ -12,7 +12,6 @@ on:
 permissions:
   contents: write
 
-
 jobs:
   format:
     uses: winstxnhdw/actions/.github/workflows/format-bun.yml@main
