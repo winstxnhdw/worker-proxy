@@ -1,6 +1,5 @@
 import { fetch_request, stringify_json } from '@/utils'
-import { createRoute, z } from '@hono/zod-openapi'
-import type { Handler } from 'hono'
+import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 
 const BatchProxyBodySchema = z.object({
   batch: z.array(
@@ -55,7 +54,7 @@ const route = createRoute({
   },
 })
 
-const handler: Handler = async (context) => {
+export const batch_proxy = new OpenAPIHono().openapi(route, async (context) => {
   const { batch } = await context.req.json<z.infer<typeof BatchProxyBodySchema>>()
 
   const responses = await Promise.all(
@@ -63,11 +62,6 @@ const handler: Handler = async (context) => {
   )
 
   return !responses.some((response) => response === undefined)
-    ? context.json({ responses: responses })
-    : context.json({ error: 'Failed to fetch from one or more endpoints!' }, 500)
-}
-
-export const batch_proxy_post = {
-  route,
-  handler,
-}
+    ? context.json({ responses: responses as string[] })
+    : context.json({ error: 'Failed to fetch from one or more endpoints!' } as const, 500)
+})

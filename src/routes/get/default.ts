@@ -1,6 +1,5 @@
 import { fetch_request } from '@/utils'
-import { createRoute, z } from '@hono/zod-openapi'
-import type { Handler } from 'hono'
+import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 
 const DefaultProxyQuerySchema = z.object({
   endpoint: z.string().openapi({ example: 'https://account.battleon.com/charpage/details?id=53251829' }),
@@ -19,9 +18,9 @@ const route = createRoute({
   request: { query: DefaultProxyQuerySchema },
   responses: {
     200: {
-      content: {
-        'text/plain': { schema: z.string() },
-      },
+      // content: {
+      //   'text/html': { schema: z.string() },
+      // },
       description: 'The string response from the endpoint.',
     },
     500: {
@@ -43,7 +42,7 @@ const parse_json = <T>(json: string | undefined): T | undefined => {
   }
 }
 
-const handler: Handler = async (context) => {
+export const default_proxy_get = new OpenAPIHono().openapi(route, async (context) => {
   const endpoint = context.req.query('endpoint')
 
   if (!endpoint) {
@@ -56,9 +55,4 @@ const handler: Handler = async (context) => {
   const response = await fetch_request(method, endpoint, body, headers)
 
   return response ? context.html(response) : context.json({ error: 'Failed to fetch the endpoint!' }, 500)
-}
-
-export const default_proxy_get = {
-  route,
-  handler,
-}
+})

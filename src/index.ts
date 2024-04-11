@@ -1,8 +1,8 @@
 import { json } from '@/middlewares'
 import { default_proxy_get } from '@/routes/get/default'
-import { redirect_proxy_get } from '@/routes/get/redirect'
-import { batch_proxy_post } from '@/routes/post/batch'
-import { default_proxy_post } from '@/routes/post/default'
+import { redirect_proxy } from '@/routes/get/redirect'
+import { batch_proxy } from '@/routes/post/batch'
+import { default_proxy } from '@/routes/post/default'
 import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
@@ -21,11 +21,7 @@ function main() {
   app.use(cors(), json())
   // app.use(cache_param({ cacheName: 'worker-proxy' }))
 
-  return app
-    .openapi(default_proxy_post.route, default_proxy_post.handler)
-    .openapi(default_proxy_get.route, default_proxy_get.handler)
-    .openapi(batch_proxy_post.route, batch_proxy_post.handler)
-    .openapi(redirect_proxy_get.route, redirect_proxy_get.handler)
+  return app.route('/', batch_proxy).route('/', default_proxy).route('/', redirect_proxy).route('/', default_proxy_get)
 }
 
 export default main()

@@ -1,5 +1,4 @@
-import { createRoute, z } from '@hono/zod-openapi'
-import type { Handler } from 'hono'
+import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 
 const RedirectProxyQuerySchema = z.object({
   endpoint: z.string().openapi({ example: 'instagram://' }),
@@ -26,15 +25,10 @@ const route = createRoute({
   },
 })
 
-const handler: Handler = async (context) => {
+export const redirect_proxy = new OpenAPIHono().openapi(route, (context) => {
   const endpoint = context.req.query('endpoint')
 
   return endpoint
     ? context.redirect(endpoint, 301)
     : context.json({ error: 'Failed to redirect to the endpoint!' }, 500)
-}
-
-export const redirect_proxy_get = {
-  route,
-  handler,
-}
+})
