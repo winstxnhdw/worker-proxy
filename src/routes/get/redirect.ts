@@ -28,6 +28,7 @@ const route = createRoute({
 
 const handler: Handler = async (context) => {
   const endpoint = context.req.query('endpoint')
+  
   return endpoint
     ? context.redirect(endpoint, 301)
     : context.json({ error: 'Failed to redirect to the endpoint!' }, 500)
