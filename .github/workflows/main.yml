@@ -10,11 +10,12 @@ on:
       - tsconfig.json
       - package.json
       - bun.lockb
-      - '**.ts'
+      - src/**
 
 jobs:
   bun:
     uses: winstxnhdw/actions/.github/workflows/bun.yml@main
     with:
+      disable-formatter: true
       disable-test: true
       disable-build: true
