@@ -18,9 +18,6 @@ const route = createRoute({
   request: { query: DefaultProxyQuerySchema },
   responses: {
     200: {
-      // content: {
-      //   'text/html': { schema: z.string() },
-      // },
       description: 'The string response from the endpoint.',
     },
     500: {
