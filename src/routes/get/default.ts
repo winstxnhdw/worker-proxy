@@ -29,7 +29,7 @@ const route = createRoute({
   },
 })
 
-const parse_json = <T>(json: string | undefined): T | undefined => {
+const parse_json = <T extends Record<string, string>>(json: string | undefined): T | undefined => {
   if (json === undefined) return undefined
 
   try {
@@ -48,7 +48,7 @@ export const default_proxy_get = new OpenAPIHono().openapi(route, async (context
 
   const method = context.req.query('method') as 'GET' | 'POST' | 'PUT' | 'DELETE'
   const body = context.req.query('body') ?? null
-  const headers = parse_json<Record<string, string>>(context.req.query('headers')) ?? {}
+  const headers = parse_json(context.req.query('headers'))
   const response = await fetch_request(method, endpoint, body, headers)
 
   return response ? context.html(response) : context.json({ error: 'Failed to fetch the endpoint!' }, 500)
