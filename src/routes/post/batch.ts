@@ -49,7 +49,7 @@ const route = createRoute({
       content: {
         'application/json': { schema: BatchProxyErrorSchema },
       },
-      description: 'Failed to fetch from one or more endpoints.',
+      description: 'The response when the proxy has failed to fetch from one or more endpoints.',
     },
   },
 })

@@ -20,7 +20,7 @@ const route = createRoute({
       content: {
         'application/json': { schema: RedirectProxyErrorSchema },
       },
-      description: 'Failed to redirect to the the endpoint.',
+      description: 'The response when no redirectable endpoint is given.',
     },
   },
 })

@@ -24,7 +24,7 @@ const route = createRoute({
       content: {
         'application/json': { schema: DefaultProxyErrorSchema },
       },
-      description: 'Failed to fetch the endpoint.',
+      description: 'The response when the proxy is unable to fetch the endpoint.',
     },
   },
 })
