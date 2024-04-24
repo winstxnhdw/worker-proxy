@@ -4,7 +4,7 @@ export const json =
   (options = { space: 4 }): MiddlewareHandler =>
   async (context, next) => {
     await next()
-    
+
     if (context.req.query('json') !== '') {
       return
     }
