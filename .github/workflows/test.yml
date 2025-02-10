@@ -20,9 +20,8 @@ jobs:
     steps:
       - name: cURL Worker
         run: |
-          echo "RESPONSE=$(curl -s $WORKER_ENDPOINT/post/default \
-            -H 'Content-Type: application/json' \
-            -d '{ "endpoint": "https://hosted.winst.in/test.txt" }')" >> $GITHUB_ENV
+          echo "RESPONSE=\
+            $(curl -s $WORKER_ENDPOINT/get/default?endpoint=https%3A%2F%2Fhosted.winst.in%2Ftest.txt)" >> $GITHUB_ENV
 
       - name: Test Success
         env:
