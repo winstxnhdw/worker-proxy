@@ -24,8 +24,7 @@ const DefaultProxyErrorSchema = z.object({
   error: z.literal('The `endpoint` query parameter is missing!'),
 })
 
-const create_proxies = () => {
-  const methods = ['get', 'post', 'put', 'delete', 'patch', 'options', 'head'] as const
+const create_proxies = (methods: ['get', 'post', 'put', 'delete', 'patch', 'options', 'head']) => {
   const proxy = new OpenAPIHono()
 
   const routes = methods.map((method) =>
@@ -61,23 +60,21 @@ const create_proxies = () => {
       const endpoint = context.req.query('endpoint')
       const request = context.req.raw
 
-      if (!endpoint) {
-        return context.json({ error: 'The `endpoint` query parameter is missing!' }, 400)
-      }
-
-      return fetch(endpoint, {
-        method: request.method,
-        headers: request.headers,
-        body: request.body,
-        redirect: request.redirect,
-        fetcher: request.fetcher,
-        integrity: request.integrity,
-        signal: request.signal,
-      })
+      return !endpoint
+        ? context.json({ error: 'The `endpoint` query parameter is missing!' }, 400)
+        : fetch(endpoint, {
+            method: request.method,
+            headers: request.headers,
+            body: request.body,
+            redirect: request.redirect,
+            fetcher: request.fetcher,
+            integrity: request.integrity,
+            signal: request.signal,
+          })
     })
   }
 
   return proxy
 }
 
-export const default_proxy = create_proxies()
+export const default_proxy = create_proxies(['get', 'post', 'put', 'delete', 'patch', 'options', 'head'])

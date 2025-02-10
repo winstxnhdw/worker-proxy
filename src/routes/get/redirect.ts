@@ -16,8 +16,8 @@ const route = createRoute({
     301: {
       description: 'Redirects to the endpoint.',
     },
-    500: {
-      description: 'The response when no redirectable endpoint is given.',
+    400: {
+      description: 'The response when the query endpoint is missing.',
       content: {
         'application/json': { schema: RedirectProxyErrorSchema },
       },
@@ -30,5 +30,5 @@ export const redirect_proxy = new OpenAPIHono().openapi(route, (context) => {
 
   return endpoint
     ? context.redirect(endpoint, 301)
-    : context.json({ error: 'Failed to redirect to the endpoint!' }, 500)
+    : context.json({ error: 'Failed to redirect to the endpoint!' }, 400)
 })

@@ -1,4 +1,3 @@
-import { fetch_request } from '@/utils'
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 
 const DefaultProxyQuerySchema = z.object({
@@ -20,8 +19,8 @@ const route = createRoute({
     200: {
       description: 'The string response from the endpoint.',
     },
-    500: {
-      description: 'The response when the proxy is unable to fetch the endpoint.',
+    400: {
+      description: 'The response when the query endpoint is missing.',
       content: {
         'application/json': { schema: DefaultProxyErrorSchema },
       },
@@ -29,27 +28,27 @@ const route = createRoute({
   },
 })
 
-const parse_json = <T extends Record<string, string>>(json: string | undefined): T | undefined => {
-  if (json === undefined) return undefined
+const parse_json = <T extends Record<string, string>>(json: string | undefined): T | Record<never, never> => {
+  if (json === undefined) return {}
 
   try {
     return JSON.parse(json)
   } catch {
-    return undefined
+    return {}
   }
 }
 
 export const default_proxy_get = new OpenAPIHono().openapi(route, async (context) => {
   const endpoint = context.req.query('endpoint')
-
-  if (!endpoint) {
-    return context.json({ error: 'Missing endpoint parameter!' })
-  }
-
   const method = context.req.query('method') as 'GET' | 'POST' | 'PUT' | 'DELETE'
   const body = context.req.query('body') ?? null
   const headers = parse_json(context.req.query('headers'))
-  const response = await fetch_request(method, endpoint, body, headers)
 
-  return response ? context.html(response) : context.json({ error: 'Failed to fetch the endpoint!' }, 500)
+  return !endpoint
+    ? context.json({ error: 'The `endpoint` query parameter is missing!' })
+    : fetch(endpoint, {
+        method: method,
+        body: body,
+        headers: headers,
+      })
 })
