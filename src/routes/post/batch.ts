@@ -62,6 +62,6 @@ export const batch_proxy = new OpenAPIHono().openapi(route, async (context) => {
   )
 
   return !responses.some((response) => response === undefined)
-    ? context.json({ responses: responses as string[] })
+    ? context.json({ responses: responses as string[] }, 200)
     : context.json({ error: 'Failed to fetch from one or more endpoints!' } as const, 500)
 })
