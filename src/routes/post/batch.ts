@@ -40,16 +40,16 @@ const route = createRoute({
   },
   responses: {
     200: {
+      description: 'The string response from the endpoint.',
       content: {
         'application/json': { schema: BatchProxyResponseSchema },
       },
-      description: 'The string response from the endpoint.',
     },
     500: {
+      description: 'The response when the proxy has failed to fetch from one or more endpoints.',
       content: {
         'application/json': { schema: BatchProxyErrorSchema },
       },
-      description: 'The response when the proxy has failed to fetch from one or more endpoints.',
     },
   },
 })

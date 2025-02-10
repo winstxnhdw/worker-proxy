@@ -17,10 +17,10 @@ const route = createRoute({
       description: 'Redirects to the endpoint.',
     },
     500: {
+      description: 'The response when no redirectable endpoint is given.',
       content: {
         'application/json': { schema: RedirectProxyErrorSchema },
       },
-      description: 'The response when no redirectable endpoint is given.',
     },
   },
 })

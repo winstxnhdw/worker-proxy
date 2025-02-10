@@ -21,10 +21,10 @@ const route = createRoute({
       description: 'The string response from the endpoint.',
     },
     500: {
+      description: 'The response when the proxy is unable to fetch the endpoint.',
       content: {
         'application/json': { schema: DefaultProxyErrorSchema },
       },
-      description: 'The response when the proxy is unable to fetch the endpoint.',
     },
   },
 })
