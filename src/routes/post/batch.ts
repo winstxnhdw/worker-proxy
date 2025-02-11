@@ -1,4 +1,3 @@
-import { fetch_request, stringify_json } from '@/utils'
 import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
 
 const BatchProxyBodySchema = z.object({
@@ -54,11 +53,32 @@ const route = createRoute({
   },
 })
 
+const fetch_request = async (
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  endpoint: string,
+  body: string | null,
+  headers?: Record<string, string>,
+): Promise<string | undefined> => {
+  try {
+    const request = await fetch(endpoint, {
+      method: method,
+      body: body,
+      headers: headers ?? {},
+    })
+
+    return request.text()
+  } catch {
+    return undefined
+  }
+}
+
 export const batch_proxy = new OpenAPIHono().openapi(route, async (context) => {
   const { batch } = await context.req.json<z.infer<typeof BatchProxyBodySchema>>()
 
   const responses = await Promise.all(
-    batch.map(({ method, endpoint, body, headers }) => fetch_request(method, endpoint, stringify_json(body), headers)),
+    batch.map(({ method, endpoint, body, headers }) =>
+      fetch_request(method, endpoint, body ? JSON.stringify(body) : null, headers),
+    ),
   )
 
   return !responses.some((response) => response === undefined)
