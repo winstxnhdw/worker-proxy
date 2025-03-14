@@ -7,3 +7,6 @@ send_metrics = false
 
 [placement]
 mode = "smart"
+
+[observability]
+enabled = true

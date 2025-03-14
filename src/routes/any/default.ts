@@ -55,15 +55,15 @@ const create_proxies = (methods: ['get', 'post', 'put', 'delete', 'patch', 'opti
 
   for (const route of routes) {
     proxy.openapi(route, async (context) => {
-      const endpoint = context.req.query('endpoint')
       const request = context.req.raw
+      const endpoint = context.req.query('endpoint')
 
       return !endpoint
         ? context.json({ error: 'The `endpoint` query parameter is missing!' }, 400)
         : fetch(endpoint, {
             method: request.method,
             headers: request.headers,
-            body: request.body,
+            body: await context.req.text(),
             redirect: request.redirect,
             fetcher: request.fetcher,
             integrity: request.integrity,
