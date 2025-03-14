@@ -4,10 +4,9 @@ on:
   push:
     paths:
       - .github/workflows/formatter.yml
-      - biome.json
-      - package.json
       - bun.lockb
-      - src/**
+      - '**.ts*'
+      - '**.json'
 
 permissions:
   contents: write
