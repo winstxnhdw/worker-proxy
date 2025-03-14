@@ -4,12 +4,10 @@ const DefaultProxyQuerySchema = z.object({
   endpoint: z.string().openapi({ example: 'https://account.battleon.com/charpage/details?id=53251829' }),
 })
 
-const DefaultProxyBodySchema = z.object({
-  body: z
-    .record(z.unknown())
-    .optional()
-    .openapi({ example: { data: 0 } }),
-})
+const DefaultProxyBodySchema = z
+  .record(z.unknown())
+  .optional()
+  .openapi({ example: { data: 0 } })
 
 const DefaultProxyMultiPartSchema = z.object({
   file: z
