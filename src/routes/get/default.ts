@@ -38,14 +38,14 @@ const parse_json = <T extends Record<string, string>>(json: string | undefined):
   }
 }
 
-export const default_proxy_get = new OpenAPIHono().openapi(route, async (context) => {
-  const endpoint = context.req.query('endpoint')
-  const method = context.req.query('method') as 'GET' | 'POST' | 'PUT' | 'DELETE'
-  const body = context.req.query('body') ?? null
-  const headers = parse_json(context.req.query('headers'))
+export const default_proxy_get = new OpenAPIHono().openapi(route, async ({ req, json }) => {
+  const endpoint = req.query('endpoint')
+  const method = req.query('method') as 'GET' | 'POST' | 'PUT' | 'DELETE'
+  const body = req.query('body') ?? null
+  const headers = parse_json(req.query('headers'))
 
   return !endpoint
-    ? context.json({ error: 'The `endpoint` query parameter is missing!' })
+    ? json({ error: 'The `endpoint` query parameter is missing!' })
     : fetch(endpoint, {
         method: method,
         body: body,
