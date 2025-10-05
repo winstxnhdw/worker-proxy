@@ -5,12 +5,12 @@ on:
     paths:
       - .github/workflows/formatter.yml
       - bun.lockb
-      - '**.ts*'
-      - '**.json'
+      - '**/*.ts'
+      - '**/*.json'
 
 permissions:
   contents: write
 
 jobs:
   format:
-    uses: winstxnhdw/actions/.github/workflows/format-bun.yml@main
+    uses: winstxnhdw/actions/.github/workflows/format-biome.yml@main
