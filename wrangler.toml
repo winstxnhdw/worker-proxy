@@ -1,9 +1,12 @@
 name = "worker-proxy"
 main = "src/index.ts"
 compatibility_flags = ["nodejs_compat", "nodejs_als"]
-compatibility_date = "2024-04-29"
+compatibility_date = "2025-06-04"
 minify = true
 send_metrics = false
 
 [placement]
 mode = "smart"
+
+[dev]
+port = 7860
