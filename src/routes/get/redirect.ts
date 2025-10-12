@@ -1,4 +1,4 @@
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 
 const RedirectProxyQuerySchema = z.object({
   endpoint: z.string().openapi({ example: 'instagram://' }),

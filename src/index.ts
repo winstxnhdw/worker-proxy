@@ -1,11 +1,11 @@
+import { swaggerUI } from '@hono/swagger-ui'
+import { OpenAPIHono } from '@hono/zod-openapi'
+import { cors } from 'hono/cors'
 import { json } from '@/middlewares'
 import { default_proxy } from '@/routes/any/default'
 import { default_proxy_get } from '@/routes/get/default'
 import { redirect_proxy } from '@/routes/get/redirect'
 import { batch_proxy } from '@/routes/post/batch'
-import { swaggerUI } from '@hono/swagger-ui'
-import { OpenAPIHono } from '@hono/zod-openapi'
-import { cors } from 'hono/cors'
 
 function main() {
   const openapi_documentation_route = '/openapi.json'

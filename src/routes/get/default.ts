@@ -1,4 +1,4 @@
-import { OpenAPIHono, createRoute, z } from '@hono/zod-openapi'
+import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
 
 const DefaultProxyQuerySchema = z.object({
   endpoint: z.string().openapi({ example: 'https://account.battleon.com/charpage/details?id=53251829' }),
